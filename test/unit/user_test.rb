@@ -22,6 +22,12 @@ class UserTest < ActiveSupport::TestCase
     end
   end
 
+  def test_fixture_validity
+    User.all.each do |user|
+      user.valid?
+    end
+  end
+
   def test_set_password
     user = User.create(
       :email                 => 'test@test.com',

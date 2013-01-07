@@ -1,9 +1,8 @@
 class UsersController < ApplicationController
 
-  before_filter :build_user, :only => [:new, :create]
-
-  def new
-  end
+  before_filter :require_current_user, :except => [:new, :create]
+  before_filter :build_user,           :only => [:new, :create]
+  before_filter :load_user,            :only => [:edit]
 
   def create
     @user.save!
@@ -12,10 +11,20 @@ class UsersController < ApplicationController
     render :new
   end
 
+  def edit
+  end
+
+  def new
+  end
+
 private
 
   def build_user
     @user = User.new(params[:user])
+  end
+
+  def load_user
+    @user = current_user
   end
 
 end

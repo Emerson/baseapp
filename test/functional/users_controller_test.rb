@@ -1,3 +1,6 @@
+# These tests also include coverage for a couple of session helper methods
+# located within the application controller.
+
 require 'test_helper'
 
 class UsersControllerTest < ActionController::TestCase
@@ -30,5 +33,22 @@ class UsersControllerTest < ActionController::TestCase
     assert_template :new
     assert assigns(:user)
   end
+
+  # == ApplicationController Tests ==========================================  
+  def test_current_user
+    user = login_as(:default)
+    get :edit
+    assert_response :success
+    assert_template :edit
+    assert assigns(:current_user)
+    assert assigns(:user)
+  end
+
+  def test_require_current_user
+    get :edit
+    assert_response :redirect
+    assert_redirected_to root_path
+  end
+
 
 end

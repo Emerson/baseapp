@@ -14,7 +14,12 @@ class User < ActiveRecord::Base
   before_create :generate_unique_token, :set_verified
 
   # == Validations ==========================================================
-  validates_presence_of :email, :password
+  validates :password,
+    :presence     => {:if => :password_required?},
+    :confirmation => true
+  validates :email,
+    :presence => true,
+    :format   => {:with => /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i}
 
   # == Scopes ===============================================================
   # == Class Methods ========================================================
@@ -24,6 +29,10 @@ class User < ActiveRecord::Base
   def generate_unique_token
     self.unique_token = SecureRandom.urlsafe_base64
     true
+  end
+
+  def password_required?
+    self.new_record?
   end
 
   def set_verified
