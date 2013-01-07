@@ -23,10 +23,12 @@ class User < ActiveRecord::Base
 
   def generate_unique_token
     self.unique_token = SecureRandom.urlsafe_base64
+    true
   end
 
   def set_verified
     self.verified = false
+    true
   end
 
 end
