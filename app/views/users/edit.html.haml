@@ -1,5 +1,16 @@
 = form_for @user do |f|
-  = f.email_field    :email
-  = f.password_field :password
-  = f.password_field :password_confirmation
-  = f.submit 'Update'
+
+  .field
+    = f.label :emai
+    = f.email_field :email
+
+  .field
+    = f.label :password
+    = f.password_field :password
+
+  .field
+    = f.label :password_confirmation
+    = f.password_field :password_confirmation
+
+  .field.actions
+    = f.submit 'Update'

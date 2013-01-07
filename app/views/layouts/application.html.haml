@@ -13,6 +13,7 @@
           %li= link_to 'Sign Up', new_user_path
 
     .content
+      = flash_message.html_safe
       = yield
   
     %footer
