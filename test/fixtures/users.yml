@@ -3,3 +3,9 @@ default:
   unique_token: unique
   verified: true
   password_digest: <%= BCrypt::Password.create('password') %>
+
+unverified:
+  email: unverified-fixture@test.com
+  unique_token: rfcy-MpWqoQNUDqG32_WKw
+  verified: false
+  password_digest: <%= BCrypt::Password.create('password') %>

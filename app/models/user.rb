@@ -24,6 +24,10 @@ class User < ActiveRecord::Base
   # == Scopes ===============================================================
   # == Class Methods ========================================================
 
+  def self.login(email = '', password)
+    user = where(:email => email, :verified => true).first.try(:authenticate, password)
+  end
+
   # == Instance Methods =====================================================
 
   def generate_unique_token
@@ -38,6 +42,11 @@ class User < ActiveRecord::Base
   def set_verified
     self.verified = false
     true
+  end
+
+  def verify!
+    self.update_column(:unique_token, nil)
+    self.update_column(:verified, true)
   end
 
 end

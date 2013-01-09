@@ -28,6 +28,12 @@ class UserTest < ActiveSupport::TestCase
     end
   end
 
+  def test_login
+    fixture = users(:default)
+    user = User.login(fixture.email, 'password')
+    assert user
+  end
+
   def test_set_password
     user = User.create(
       :email                 => 'test@test.com',

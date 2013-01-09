@@ -1,7 +1,7 @@
 class UserSessionsController < ApplicationController
 
   def create
-    @user = User.find_by_email(params[:email]).try(:authenticate, params[:password])
+    @user = User.login(params[:email], params[:password])
     if @user
       session[:user_id] = @user.id
       redirect_to account_path, :notice => 'You have been logged in'

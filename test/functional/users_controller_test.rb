@@ -34,6 +34,17 @@ class UsersControllerTest < ActionController::TestCase
     assert assigns(:user)
   end
 
+  def test_verify
+    user = users(:unverified)
+    get :verify, :token => user.unique_token
+    assert_response :redirect
+    user.reload
+    assert assigns(:user)
+    assert_nil user.unique_token
+    assert user.verified
+    assert_redirected_to root_path
+  end
+
   # == ApplicationController Tests ==========================================  
   def test_current_user
     user = login_as(:default)
