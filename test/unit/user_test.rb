@@ -44,4 +44,11 @@ class UserTest < ActiveSupport::TestCase
     assert user.authenticate('test')
   end
 
+  def test_verify
+    user = users(:unverified)
+    user.verify!
+    assert_nil user.unique_token
+    assert user.verified
+  end
+
 end
