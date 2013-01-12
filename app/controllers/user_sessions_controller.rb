@@ -6,7 +6,7 @@ class UserSessionsController < ApplicationController
       session[:user_id] = @user.id
       redirect_to account_path, :notice => 'You have been logged in'
     else
-      redirect_to root_path, :error => 'There was a problem logging you in'
+      redirect_to root_path, :alert => 'There was a problem logging you in'
     end
   end
 

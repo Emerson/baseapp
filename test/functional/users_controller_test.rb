@@ -41,6 +41,31 @@ class UsersControllerTest < ActionController::TestCase
     assert assigns(:user)
   end
 
+  def test_update
+    user = users(:default)
+    password_digest = user.password_digest
+    session[:user_id] = user.id
+    put :update, :id => user.id, :user => {
+      :password              => 'new_password',
+      :password_confirmation => 'new_password'
+    }
+    user.reload
+    assert_redirected_to account_path
+    assert flash[:notice]
+    assert password_digest != user.password_digest
+  end
+
+  def test_update_fail
+    user = users(:default)
+    session[:user_id] = user.id
+    put :update, :id => user.id, :user => {
+      :email => 'update-fail@test.com'
+    }
+    assert_response :success
+    assert_template :edit
+    assert user.email != 'update-fail@test.com'
+  end
+
   def test_verify
     user = users(:unverified)
     get :verify, :token => user.unique_token

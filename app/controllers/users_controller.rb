@@ -2,7 +2,7 @@ class UsersController < ApplicationController
 
   before_filter :require_current_user,      :except => [:new, :create, :verify, :request_password_reset, :send_password_reset, :reset_password]
   before_filter :build_user,                :only   => [:new, :create]
-  before_filter :load_user,                 :only   => [:edit]
+  before_filter :load_user,                 :only   => [:edit, :update]
   before_filter :verify_and_login_by_token, :only   => [:reset_password, :verify]
 
   def create
@@ -16,6 +16,13 @@ class UsersController < ApplicationController
   end
 
   def new
+  end
+
+  def update
+    @user.update_attributes!(params[:user])
+    redirect_to account_path, :notice => 'Account updated'
+  rescue ActiveRecord::RecordInvalid
+    render :edit
   end
 
   def request_password_reset

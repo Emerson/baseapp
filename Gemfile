@@ -1,11 +1,12 @@
 source 'https://rubygems.org'
 
+gem 'rails',           '~> 3.2.11'
 gem 'bcrypt-ruby',     '~> 3.0.1'
 gem 'bourbon',         '~> 3.0.1'
-gem 'rails',           '~> 3.2.10'
 gem 'jquery-rails',    '~> 2.1.4'
 gem 'sqlite3',         '~> 1.3.6'
 gem 'omniauth',        '~> 1.1.1'
+gem 'formatted_form',  '~> 2.0.3'
 
 group :assets do
   gem 'haml-rails',    '~> 0.3.5'
