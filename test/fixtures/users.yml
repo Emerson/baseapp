@@ -1,6 +1,5 @@
 default:
   email: default-fixture@test.com
-  unique_token: unique
   verified: true
   password_digest: <%= BCrypt::Password.create('password') %>
 

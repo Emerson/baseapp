@@ -9,7 +9,7 @@ private
   end
 
   def require_current_user
-    redirect_to root_path, :error => 'You need to be logged in to see that' unless current_user
+    redirect_to root_path, :alert => 'You need to be logged in to see that' unless current_user
   end
 
 end

@@ -19,8 +19,12 @@ class User < ActiveRecord::Base
     :presence     => {:if => :password_required?},
     :confirmation => true
   validates :email,
-    :presence => true,
-    :format   => {:with => /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i}
+    :presence   => true,
+    :uniqueness => true,
+    :format     => {:with => /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i}
+  validate :immutable_email,
+    :on      => :update,
+    :if      => :email_changed?
 
   # == Scopes ===============================================================
   # == Class Methods ========================================================
@@ -35,8 +39,13 @@ class User < ActiveRecord::Base
     UserMailer.verification_email(self).deliver
   end
 
-  def generate_unique_token
-    self.unique_token = SecureRandom.urlsafe_base64
+  def generate_unique_token(save = false)
+    token = SecureRandom.urlsafe_base64
+    if save
+      self.update_column(:unique_token, token)
+    else
+      self.unique_token = token
+    end
     true
   end
 
@@ -49,9 +58,18 @@ class User < ActiveRecord::Base
     true
   end
 
+  def send_password_reset!
+    self.generate_unique_token(true)
+    UserMailer.reset_password(self).deliver
+  end
+
   def verify!
     self.update_column(:unique_token, nil)
     self.update_column(:verified, true)
+  end
+
+  def immutable_email
+    errors.add(:email, 'You cannot change your email address')
   end
 
 end
