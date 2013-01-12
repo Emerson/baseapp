@@ -6,15 +6,22 @@ require 'test_helper'
 class UsersControllerTest < ActionController::TestCase
 
   def test_create
-    assert_difference "User.count" do
+    assert_difference "User.count ActionMailer::Base.deliveries.size" do
       post :create, :user => {
         :email                 => 'create@test.com',
         :password              => 'create',
         :password_confirmation => 'create'
       }
-      assert assigns(:user)
+      user = assigns(:user)
+      assert user
       assert_response :redirect
       assert_redirected_to root_path
+      # Email Verification
+      verification_email = ActionMailer::Base.deliveries.last
+      assert_equal "Verify Your Account", verification_email.subject
+      assert_equal 'create@test.com', verification_email.to[0]
+      assert verification_email.html_part.to_s.include? user.unique_token
+      assert verification_email.text_part.to_s.include? user.unique_token
     end
   end
 
@@ -26,6 +33,17 @@ class UsersControllerTest < ActionController::TestCase
       assert_template :new
     end
   end
+
+  # test "invite friend" do
+  #   assert_difference 'ActionMailer::Base.deliveries.size', +1 do
+  #     post :invite_friend, :email => 'friend@example.com'
+  #   end
+  #   invite_email = ActionMailer::Base.deliveries.last
+ 
+  #   assert_equal "You have been invited by me@example.com", invite_email.subject
+  #   assert_equal 'friend@example.com', invite_email.to[0]
+  #   assert_match(/Hi friend@example.com/, invite_email.body)
+  # end
 
   def test_new
     get :new

@@ -10,7 +10,12 @@ Expense::Application.configure do
   # Configure static asset server for tests with Cache-Control for performance
   config.serve_static_assets = true
   config.static_cache_control = "public, max-age=3600"
+  
+  # TODO: Move this into settings file
+  config.action_controller.default_url_options = {:host => 'test.local'}
+  config.action_mailer.default_url_options = {:host => 'test.local'}
 
+  
   # Log error messages when you accidentally call methods on nil
   config.whiny_nils = true
 

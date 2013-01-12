@@ -12,6 +12,7 @@ class User < ActiveRecord::Base
   
   # == Callbacks ============================================================
   before_create :generate_unique_token, :set_verified
+  after_create  :deliver_verification_email
 
   # == Validations ==========================================================
   validates :password,
@@ -29,6 +30,10 @@ class User < ActiveRecord::Base
   end
 
   # == Instance Methods =====================================================
+
+  def deliver_verification_email
+    UserMailer.verification_email(self).deliver
+  end
 
   def generate_unique_token
     self.unique_token = SecureRandom.urlsafe_base64
